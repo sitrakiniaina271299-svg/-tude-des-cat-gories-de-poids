@@ -1,0 +1,156 @@
+```{r}
+library(tidyverse)
+library(readxl)
+library(FSA)
+library(DescTools)
+```
+
+```{r}
+donnee <- read_excel("D:/Fichier xlxs/obesité.xlsx")
+head(donnee)
+names(donnee)
+drop_na(donnee)
+dim(donnee)
+```
+```{r}
+summary(donnee)
+```
+
+
+```{r}
+table(donnee$`Categorie de poids`)
+prop.table(table(donnee$`Categorie de poids`))*100
+```
+
+```{r}
+ggplot(donnee, aes(x = `Categorie de poids`)) + geom_bar(aes(y = after_stat(count/ sum(count)*100)), fill = "red") + geom_text(aes(y = after_stat(count/sum(count)*100), label = after_stat(round(count/sum(count)*100, 1))), stat = "count", vjust = -0.5) + labs(x = "Niveau d'obésité", y = "Pourcentage (%)", title = "Répartition des niveaux d'obésité")
+```
+```{r}
+shapiro.test(donnee$poids)
+hist(donnee$poids)
+aggregate(poids ~ `Categorie de poids`, data = donnee,mean, na.rm = TRUE)
+aggregate(poids/taille ~ `Categorie de poids`, data = donnee,mean, na.rm = TRUE)
+ggplot(donnee, aes(x = `Categorie de poids`, y = poids)) + stat_summary(fun = mean, geom = "bar", fill = "red")
+```
+```{r}
+shapiro.test(donnee$Age)
+hist(donnee$Age)
+boxplot(donnee$Age)
+aggregate(Age ~ `Categorie de poids`, data = donnee, median, na.rm = TRUE)
+ggplot(donnee, aes(x = `Categorie de poids`, y = Age)) + stat_summary(fun = median, geom = "bar", fill = "red")
+
+```
+```{r}
+shapiro.test(donnee$taille)
+hist(donnee$taille)
+aggregate(taille ~ `Categorie de poids` , data = donnee, median, na.rm = TRUE)
+ggplot(donnee, aes(x = `Categorie de poids`, y = taille)) + stat_summary(fun= median, geom = "bar", fill = "red")
+```
+```{r}
+shapiro.test(donnee$`Nombre de repas principaux par jour`)
+hist(donnee$`Nombre de repas principaux par jour`)
+aggregate(`Nombre de repas principaux par jour` ~ `Categorie de poids` , data = donnee, median, na.rm = TRUE)
+ggplot(donnee, aes(x = `Categorie de poids`, y = `Nombre de repas principaux par jour`)) + stat_summary(fun= median, geom = "bar", fill = "red")
+ggplot(donnee, aes(x = `Categorie de poids`, y = `Nombre de repas principaux par jour`)) + geom_boxplot()
+
+kruskal.test(donnee$`Categorie de poids`, donnee$`Nombre de repas principaux par jour`)
+dunnTest(donnee$`Nombre de repas principaux par jour`, donnee$`Categorie de poids`, method = "bonferroni")
+```
+```{r}
+aggregate(`Consommation de l'eau` ~ `Categorie de poids`, data = donnee, median, na.rm = TRUE)
+ggplot(donnee, aes(x = `Categorie de poids`, y = `Consommation de l'eau`)) + stat_summary(fun= median, geom = "bar", fill = "red")
+ggplot(donnee, aes(x = `Categorie de poids`, y = `Consommation de l'eau`)) + geom_boxplot()
+
+kruskal.test(donnee$`Categorie de poids`, donnee$`Consommation de l'eau`)
+```
+```{r}
+aggregate(`Frequence activite physique`~ `Categorie de poids`,data =donnee, median, na.rm = TRUE)
+ggplot(donnee, aes(x = `Categorie de poids`, y = `Frequence activite physique`)) + stat_summary(fun = median, geom = "bar", fill = "red")
+ggplot(donnee, aes(x = `Categorie de poids`, y = `Frequence activite physique`)) + geom_boxplot()
+
+kruskal.test(donnee$`Categorie de poids`, donnee$`Frequence activite physique`)
+```
+```{r}
+aggregate(`Temps passé techonologie`~ `Categorie de poids`,data =donnee, median, na.rm = TRUE)
+ggplot(donnee, aes(x = `Categorie de poids`, y = `Temps passé techonologie`)) + stat_summary(fun = median, geom = "bar", fill = "red")
+ggplot(donnee, aes(x = `Categorie de poids`, y = `Temps passé techonologie`)) + geom_boxplot()
+
+kruskal.test(donnee$`Categorie de poids`, donnee$`Temps passé techonologie`)
+```
+```{r}
+table <-table(donnee$`Categorie de poids`, donnee$`historique de familiaux surpoids`)
+table
+prop.table(table,1)*100
+
+chi2 <- chisq.test(donnee$`Categorie de poids`, donnee$`historique de familiaux surpoids`)
+chi2
+
+CramerV(table)
+
+chi2$stdres
+```
+```{r}
+table <-table(donnee$`Categorie de poids`, donnee$`Consommation frequente d'aliments riche en calaries`)
+table
+prop.table(table,1)*100
+
+chi2 <- chisq.test(donnee$`Categorie de poids`, donnee$`Consommation frequente d'aliments riche en calaries`)
+chi2
+
+CramerV(table)
+
+chi2$stdres
+```
+```{r}
+table <-table(donnee$`Categorie de poids`, donnee$`Surveillance de la consommation de calorie`)
+table
+prop.table(table,1)*100
+
+chi2 <- chisq.test(donnee$`Categorie de poids`, donnee$`Surveillance de la consommation de calorie`)
+chi2
+
+CramerV(table)
+
+chi2$stdres
+```
+```{r}
+table <-table(donnee$`Categorie de poids`, donnee$`consommation d'alcool`)
+table
+prop.table(table,1)*100
+
+chi2 <- chisq.test(donnee$`Categorie de poids`, donnee$`consommation d'alcool`)
+chi2
+
+CramerV(table)
+
+chi2$stdres
+```
+```{r}
+table <-table(donnee$`Categorie de poids`, donnee$`Consommation d'aliments entre les repas`)
+table
+prop.table(table,1)*100
+
+chi2 <- chisq.test(donnee$`Categorie de poids`, donnee$`Consommation d'aliments entre les repas`)
+chi2
+
+CramerV(table)
+
+chi2$stdres
+```
+```{r}
+table <-table(donnee$`Categorie de poids`, donnee$`mode de transport utilisé`)
+table
+prop.table(table,1)*100
+
+chi2 <- chisq.test(donnee$`Categorie de poids`, donnee$`mode de transport utilisé`)
+chi2
+
+CramerV(table)
+
+chi2$stdres
+```
+```{r}
+table(donnee$sexe, donnee$`Categorie de poids`)
+prop.table(table(donnee$sexe, donnee$`Categorie de poids`))
+```
+
