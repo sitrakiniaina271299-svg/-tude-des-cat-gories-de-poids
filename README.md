@@ -1,7 +1,7 @@
 # Etude-des-categories-de-poids
 ## 1. Présentation du projet
 
-Ce projet consiste à réaliser une analyse statistique des différentes catégories à partir d'un jeu de données.
+Ce projet consiste à réaliser une analyse statistique des différentes catégories de poids à partir d'un jeu de données.
 L'objectif est d'explorer les données, d'identifier les relations entre les variables
 
 ## 2. Objectifs
